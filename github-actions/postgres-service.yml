@@ -1,0 +1,29 @@
+name: Example
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12.3-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        env:
+          DATABASE_URL: "postgres://user:secret@localhost:5432/db?sslmode=disable"
+        run: |
+          echo "tests"
