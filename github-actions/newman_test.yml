@@ -1,0 +1,17 @@
+#It runs API tests (from Postman) and runs them on GitHub actions
+
+name: Example
+
+on: [push]
+
+jobs:
+  newman:
+    name: 'Postman API tests'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: anthonyvscode/newman-action@v1
+        with:
+#         collection file is exported from Postman, and it is in the repository root
+          collection: api_tests.json
+          reporters: cli
