@@ -1,0 +1,17 @@
+#It runs react app and cypress tests
+
+name: Example
+
+on: [push]
+
+jobs:
+  cypress-run:
+    name: 'E2E Cypress Tests'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm start
