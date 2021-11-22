@@ -1,0 +1,20 @@
+#It deploys app on netlify
+
+name: Example
+
+on: [push]
+
+jobs:
+  deploy:
+    name: 'Deploy to Netlify'
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: jsmrcaga/action-netlify-deploy@v1.1.0
+        with:
+#         Auth token: https://app.netlify.com/user/applications#personal-access-tokens
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+#         Site id: https://app.netlify.com/sites/<your-app>/settings/general - API ID
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE  }}
+          NETLIFY_DEPLOY_MESSAGE: "Prod deploy v${{ github.ref }}"
+          NETLIFY_DEPLOY_TO_PROD: true
