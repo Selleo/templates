@@ -1,0 +1,18 @@
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.29.0
+
+executors:
+  node14:
+    docker:
+      - image: 'cypress/base:14.17.0'
+
+workflows:
+  e2e-tests:
+    jobs:
+      - cypress/run:
+          yarn: true
+          executor: node14
+          start: yarn dev
+          wait-on: 'http://localhost:3000'
+          store_artifacts: true
