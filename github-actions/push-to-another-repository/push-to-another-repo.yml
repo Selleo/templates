@@ -1,0 +1,23 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy-to-separate-repo:
+    name: Commit and push
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        repository: 'Selleo/dev-templates' # Put your repo here
+        ref: 'master'
+        ssh-key: ${{ secrets.DEPLOY_SSH_KEY }} # Ensure that it matches your secret
+    - name: Push
+      run: |-
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add your_changes.txt # Add files that you want to push 
+        git commit -m "Deploy" # Customize your commit message
+        git push
