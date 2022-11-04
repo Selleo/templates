@@ -38,9 +38,23 @@ data "cloudinit_config" "retool" {
 
 tpl/cloudinit.yml:
 ```yaml
-bootcmd:
-  - [ mkdir, -p, "${mount_point}" ]
-  - [ mount, -t, "${mount_fstype}", "${mount_device}", "${mount_point}"]
+write_files:
+
+- path: /etc/docker/daemon.json
+  permissions: '0644'
+  content: |
+    {
+      "data-root": "${mount_point}/docker" 
+    }
+
+- path: /root/mount.sh
+  permissions: '0755'
+  content: |
+    mkdir -p "${mount_point}"
+    mount -t ${mount_fstype} "${mount_device}" "${mount_point}"
+
+runcmd:
+  - . /root/mount.sh
 ```
 
 
