@@ -1,18 +1,19 @@
-name: Deploy Frontend
+name: Deploy Frontend (production)
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '*'
     paths:
       - packages/client/**
+      - .github/workflows/deploy-fe-prod.yml
 
 jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: staging
-      url: YOUR_APP_URL
+      name: production
+      url: https://
     defaults:
       run:
         working-directory: ./packages/client
@@ -38,14 +39,14 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_REGION: eu-central-1
           SOURCE_DIR: "packages/client/build"
-          DEST_DIR: ${{ secrets.AWS_S3_BUCKET_PATH }}
+          DEST_DIR: apps/office
       - name: Invalidate CloudFront
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.AWS_CDN_ID }}
           PATHS: "/*"
-          AWS_REGION: "us-east-1"
+          AWS_REGION: us-east-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
