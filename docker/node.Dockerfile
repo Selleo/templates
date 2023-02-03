@@ -1,4 +1,3 @@
-```Dockerfile
 FROM node:16-alpine AS builder
 
 WORKDIR "/app"
@@ -21,4 +20,3 @@ COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
 ENV PATH "/app/node_modules/.bin:$PATH"
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]
-```
