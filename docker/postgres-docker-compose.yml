@@ -12,10 +12,9 @@ services:
       POSTGRES_DB: db
 
   pgweb:
-    container_name: pgweb
     restart: always
     image: sosedoff/pgweb
     ports:
       - "8081:8081"
     environment:
-      - DATABASE_URL=postgres://user:secret@pg:5432/db?sslmode=disable
+      - PGWEB_DATABASE_URL=postgres://user:secret@pg:5432/db?sslmode=disable
