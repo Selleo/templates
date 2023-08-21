@@ -28,3 +28,13 @@ git-chglog -o CHANGELOG.md --next-tag vMAJOR.MINOR.PATCH
 # if you already have tags, you can generate changelog with:
 git-chglog -o CHANGELOG.md
 ```
+
+Example:
+
+```bash
+git tag -m "Release new version" -a vX.Y.Z
+git-chglog -o CHANGELOG.md
+git add CHANGELOG.md
+git commit -m "chore: Update CHANGELOG.md"
+git push origin HEAD --tags
+```
