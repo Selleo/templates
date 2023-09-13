@@ -4,9 +4,6 @@ on:
   push:
     tags:
       - '*'
-    paths:
-      - packages/api/**
-      - .github/workflows/deploy-be-prod.yml
 
 jobs:
   build:
