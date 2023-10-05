@@ -4,21 +4,7 @@
 
 ## Generating changelog
 
-
-Install changelog tool:
-
-```bash
-asdf plugin add git-chglog
-asdf install git-chglog latest
-asdf local git-chglog <LATEST_VERSION>
-```
-
-For the first time when repo does not have changelog:
-
-```bash
-git-chglog --init
-# then walk through the wizard (options can be changed later in a file)
-```
+### Without makefile
 
 Every release, generate changelog:
 
@@ -37,4 +23,25 @@ git-chglog -o CHANGELOG.md
 git add CHANGELOG.md
 git commit -m "docs: Update CHANGELOG.md"
 git push origin HEAD --tags
+```
+
+### With makefile
+
+```bash
+TAG=vX.Y.Z make changelog
+```
+
+## Install changelog tool
+
+```bash
+asdf plugin add git-chglog
+asdf install git-chglog latest
+asdf local git-chglog <LATEST_VERSION>
+```
+
+For the first time when repo does not have changelog:
+
+```bash
+git-chglog --init
+# then walk through the wizard (options can be changed later in a file)
 ```
