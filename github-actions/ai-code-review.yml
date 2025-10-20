@@ -1,0 +1,42 @@
+ai_review:
+  name: AI Review
+  runs-on: ubuntu-latest
+  if: ${{ !contains(github.event.pull_request.title, 'WIP') }}
+  steps:
+    - uses: actions/checkout@v4
+    - name: AI Review
+      uses: anthropics/claude-code-action@v1
+      with:
+        anthropic_api_key: ${{ secrets.AI_REVIEW_ANTHROPIC_API_KEY }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        track_progress: true
+        use_sticky_comment: true
+        claude_args: |
+          --max-turns 3
+          --model claude-sonnet-4-5-20250929
+        prompt: |
+          Review this PR for: critical bugs, security issues, logic/concurrency errors, perf/memory problems, error handling, DB issues (N+1, indexes, injection), type/nullable hazards, API breaks.
+
+          Tests: ensure affected paths have useful tests; update existing ones; propose concrete new cases (names, setup, assertions) when missing.
+
+          Architecture: avoid duplication; align with existing patterns/components; call out meaningful smells with fixes.
+
+          Simplicity: prefer clearer, smaller solutions. If over-engineered, suggest a simpler patch.
+
+          UI/React: adhere to design system; reuse components; avoid duplicating existing UI.
+
+          Do NOT nitpick formatting, naming (unless confusing), minor refactors, or non-critical docs.
+
+          Style: concise, friendly, actionable. For any blocking issue, include a concrete code snippet/patch and why it matters.
+
+          Discipline: consider system-wide impact, related unchanged code, rollout safety (flags/canary/metrics).
+
+          Checklist:
+          - scope/files covered
+          - security/logic/perf/concurrency/errors/compat
+          - duplication & pattern alignment
+          - simplicity alternatives
+          - tests updated/added & useful
+          - concrete patches for blockers
+          - related impacts & follow-ups
+          - UI follows design; reuse where possible
