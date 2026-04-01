@@ -1,0 +1,75 @@
+logs:
+  level: INFO
+
+api:
+  dashboard: true
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: todo@domain.tld
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: web
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: proxy
+  file:
+    filename: /etc/traefik/traefik.yml
+
+http:
+  middlewares:
+    inhouse:
+      ipAllowList:
+        sourceRange:
+          - "x.y.z.w/32"
+
+  services:
+    app1:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:3000"
+
+    app2:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:3001"
+
+  routers:
+    dashboard:
+      rule: Host(`proxy.domain.tld`)
+      entryPoints:
+        - websecure
+      service: api@internal
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - inhouse
+
+    app1:
+      rule: Host(`app1.domain.tld`)
+      entryPoints:
+        - websecure
+      service: app1
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - inhouse
+
+    app2:
+      rule: Host(`app2.domain.tld`)
+      entryPoints:
+        - websecure
+      service: app2
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+       - inhouse
