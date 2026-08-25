@@ -1,0 +1,19 @@
+s3:
+    image: ghcr.io/shyim/local-s3:latest
+    restart: unless-stopped
+    ports:
+      - 9000:9000
+    environment:
+      - S3_DATA_DIR=/data/s3
+      - S3_BUCKETS=dev,test
+      - S3_ACCOUNT_ROOT=root:root
+      - S3_ACCOUNT_APP=dev:secret
+      - S3_ACCOUNT_APP_BUCKETS=dev
+      - S3_ACCOUNT_TEST=test:secret
+      - S3_ACCOUNT_TEST_BUCKETS=test
+    volumes:
+      - s3:/data/s3
+
+volumes:
+  s3:
+    driver: local
